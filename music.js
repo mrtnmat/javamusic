@@ -14,6 +14,11 @@ function playSound(osc, start, length) {
     osc.stop(ctx.currentTime + start + length)
 }
 
+function beatLength(bpm) {
+    const bps = bpm / 60
+    return 1 / bps
+}
+
 const Note = {
     C: 0,
     CSh: 1,
@@ -51,20 +56,23 @@ function newPause(duration) {
     }
 }
 
-function playMelody(melody, starttime = 0) {
+function playMelody(melody, starttime = 0, bpm = 180) {
+    const beat = beatLength(bpm)
     let time = starttime
+    let sec
     melody.forEach(nt => {
+        sec = nt.duration * beat
         if (!nt.pause) {
-            playSound(nt.note, time, nt.duration)
+            playSound(nt.note, time, sec)
         }
-        time += nt.duration
+        time += sec
     });
     return time
 }
 
-function loopMelody(melodyFn, n = 1, time = 0) {
+function loopMelody(melodyFn, n = 1, time = 0, bpm = 180) {
     if (n < 1) {
         return
     }
-    loopMelody(melodyFn, n - 1, playMelody(melodyFn(), time))
+    loopMelody(melodyFn, n - 1, playMelody(melodyFn(), time, bpm))
 }
