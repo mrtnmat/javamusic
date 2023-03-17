@@ -1,4 +1,4 @@
-const ctx = new AudioContext()
+let ctx 
 const c0 = 16.35
 
 function newSound(type, freq) {
