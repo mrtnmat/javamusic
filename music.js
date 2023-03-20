@@ -34,6 +34,10 @@ const Note = {
     B: 11,
 }
 
+function beatLength(bpm) {
+    return 1 / (bpm / 60)
+}
+
 function newNote(type, note, octave) {
     const a = Math.pow(2, 1 / 12)
     const distance = octave * 12 + note
@@ -57,15 +61,14 @@ function newPause(duration) {
 }
 
 function playMelody(melody, starttime = 0, bpm = 180) {
-    const beat = beatLength(bpm)
     let time = starttime
-    let sec
+    let b = beatLength(bpm)
     melody.forEach(nt => {
-        sec = nt.duration * beat
+        let dur = b * nt.duration
         if (!nt.pause) {
-            playSound(nt.note, time, sec)
+            playSound(nt.note, time, dur)
         }
-        time += sec
+        time += dur
     });
     return time
 }
